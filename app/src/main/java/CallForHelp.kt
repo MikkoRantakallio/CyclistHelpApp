@@ -17,7 +17,7 @@ data class CallForHelp(
 
 {
     fun addToParse(callback: (objectId: String) -> Unit) {
-        if (objectId !== null) throw Exception("Call For Help is already saved to Parse!")
+        if (objectId !== null) throw Exception("Help request is already saved to Parse!")
 
         val parseCFH = ParseObject("CallForHelp")
         parseCFH.put("Icon", icon)
@@ -33,7 +33,7 @@ data class CallForHelp(
     }
 
     fun updateToParse(callback: (objectId: String) -> Unit) {
-        if (objectId === null) throw Exception("Call for help hasn't been saved to Parse yet!")
+        if (objectId === null) throw Exception("Help request hasn't been saved to Parse yet!")
 
         val query = ParseQuery.getQuery<ParseObject>("CallForHelp")
         val parseCFH = query.get(objectId)
