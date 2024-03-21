@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import java.time.LocalDateTime
 import java.util.Date
 
 class FormActivity : ComponentActivity() {
@@ -51,7 +52,8 @@ class FormActivity : ComponentActivity() {
                         icon = icon,
                         title = title,
                         description = description,
-                        status = status
+                        status = status,
+                        createdAt = java.util.Calendar.getInstance().time
                     )
                     newCFH.addToParse {
                         viewModel.CallForHelps.value += (it to newCFH)

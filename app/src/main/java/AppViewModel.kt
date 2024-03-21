@@ -3,6 +3,7 @@ package com.example.cyclisthelp
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import java.text.SimpleDateFormat
 
 class AppViewModel : ViewModel() {
 
@@ -20,6 +21,8 @@ class AppViewModel : ViewModel() {
                         title = parseCFH.getString("Title")!!,
                         description = parseCFH.getString("Description")!!,
                         status = parseCFH.getString("Status")!!,
+                        createdAt = parseCFH.createdAt,
+
                     )
                     this.CallForHelps.value += (cfh.objectId!! to cfh)
                 }

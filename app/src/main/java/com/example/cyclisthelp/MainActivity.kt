@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.example.cyclisthelp.ui.theme.CyclistHelpTheme
+import java.text.SimpleDateFormat
 
 class MainActivity : ComponentActivity() {
 
@@ -100,7 +101,7 @@ fun CfhListItem(cfh: CallForHelp, onCfhListItemClick: (cfh: CallForHelp) -> Unit
             Text(text = cfh.title, fontSize = 18.sp)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = cfh.description,
+                text = SimpleDateFormat("dd.MM.YYYY HH:mm").format(cfh.createdAt),
                 fontSize = 14.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -108,6 +109,13 @@ fun CfhListItem(cfh: CallForHelp, onCfhListItemClick: (cfh: CallForHelp) -> Unit
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = cfh.description,
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Tähän vois tulla vaikka karttalinkki",
                 fontSize = 14.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

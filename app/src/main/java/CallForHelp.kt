@@ -12,7 +12,7 @@ data class CallForHelp(
     var title: String,
     var description: String,
     var status: String,
-//    var createdAt: Date,
+    var createdAt: Date?
 )
 
 {
