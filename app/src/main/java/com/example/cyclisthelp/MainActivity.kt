@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,12 +31,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.recreate
 
 import com.example.cyclisthelp.ui.theme.CyclistHelpTheme
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import java.text.SimpleDateFormat
+import java.util.logging.Handler
 
 class MainActivity : ComponentActivity() {
 
@@ -57,6 +64,7 @@ class MainActivity : ComponentActivity() {
                     context.startActivity(intent)                },
             )
         }
+
     }
 }
 
@@ -95,7 +103,32 @@ fun CfhListItem(cfh: CallForHelp, onCfhListItemClick: (cfh: CallForHelp) -> Unit
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text = cfh.icon, fontSize = 32.sp, modifier = Modifier.size(48.dp))
+        val imageModifier = Modifier
+            .size(50.dp)
+
+        when (cfh.status) {
+            "Open" ->
+                Image(painter = painterResource(R.drawable.open),
+                    contentDescription = stringResource(id = R.string.open_description),
+                    modifier = imageModifier
+                    )
+
+            "Ongoing" ->
+                Image(
+                    painter = painterResource(R.drawable.ongoing),
+                    contentDescription = stringResource(id = R.string.ongoing_description),
+                    modifier = imageModifier
+                )
+
+            "Closed" ->
+                Image(
+                    painter = painterResource(R.drawable.closed),
+                    contentDescription = stringResource(id = R.string.closed_description),
+                    modifier = imageModifier
+                )
+        }
+
+//        Text(text = cfh.icon, fontSize = 32.sp, modifier = Modifier.size(48.dp))
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(text = cfh.title, fontSize = 18.sp)

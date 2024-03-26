@@ -16,11 +16,11 @@ class AppViewModel : ViewModel() {
                 for (parseCFH in cfhs) {
                     val cfh = CallForHelp(
                         objectId = parseCFH.objectId,
-                        icon = parseCFH.getString("Icon")!!,
                         title = parseCFH.getString("Title")!!,
                         description = parseCFH.getString("Description")!!,
                         status = parseCFH.getString("Status")!!,
                         createdAt = parseCFH.createdAt,
+                        loca = null
 
                     )
                     this.CallForHelps.value += (cfh.objectId!! to cfh)

@@ -1,5 +1,8 @@
 package com.example.cyclisthelp
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,7 +38,6 @@ import androidx.compose.ui.unit.dp
 
 class FormActivity : ComponentActivity() {
     private val viewModel = AppViewModel.getInstance()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val objectId = intent.getStringExtra("objectId")
@@ -44,24 +46,24 @@ class FormActivity : ComponentActivity() {
         setContent {
             FormActivityContent(
                 cfh,
-                onAddClick = { icon: String, title: String, description: String, status: String ->
+                onAddClick = { title: String, description: String, status: String ->
+
                     if (cfh !== null) return@FormActivityContent
                     val newCFH = CallForHelp(
-                        icon = icon,
                         title = title,
                         description = description,
                         status = status,
+                        loca = null,
                         createdAt = java.util.Calendar.getInstance().time
                     )
                     newCFH.addToParse {
-                        viewModel.CallForHelps.value += (it to newCFH)
+                        viewModel.CallForHelps.value = mapOf((it to newCFH)) + viewModel.CallForHelps.value
                         finish()
                     }
                 },
-                onSaveClick = { icon: String, title: String, description: String, status: String ->
+                onSaveClick = { title: String, description: String, status: String ->
                     if (cfh === null) return@FormActivityContent
                     val updatedCFH = cfh.copy()
-                    updatedCFH.icon = icon
                     updatedCFH.title = title
                     updatedCFH.description = description
                     updatedCFH.status = status
@@ -88,8 +90,8 @@ class FormActivity : ComponentActivity() {
 @Composable
 fun FormActivityContent(
     callforhelp: CallForHelp?,
-    onAddClick: (icon: String, title: String, description: String, status: String) -> Unit,
-    onSaveClick: (icon: String, title: String, description: String, status: String) -> Unit,
+    onAddClick: (title: String, description: String, status: String) -> Unit,
+    onSaveClick: (title: String, description: String, status: String) -> Unit,
     onDeleteClick: () -> Unit,
 ) {
     MaterialTheme {
@@ -108,11 +110,11 @@ fun FormActivityContent(
             },
         ) { contentPadding ->
             Box(modifier = Modifier.padding(contentPadding)) {
-                CfhForm(callforhelp = callforhelp, onSave = { icon, title, description, status ->
+                CfhForm(callforhelp = callforhelp, onSave = { title, description, status ->
                     if (callforhelp === null) {
-                        onAddClick(icon, title, description, status)
+                        onAddClick(title, description, status)
                     } else {
-                        onSaveClick(icon, title, description, status)
+                        onSaveClick(title, description, status)
                     }
                 })
             }
@@ -124,13 +126,26 @@ fun FormActivityContent(
 @Composable
 fun CfhForm(
     callforhelp: CallForHelp?,
-    onSave: (icon: String, title: String, description: String, status: String) -> Unit
+    onSave: (title: String, description: String, status: String) -> Unit
 ) {
     var title by remember { mutableStateOf(TextFieldValue(callforhelp?.title ?: "")) }
     var description by remember { mutableStateOf(TextFieldValue(callforhelp?.description ?: "")) }
 
     val radioOptions = listOf("Open","Ongoing","Closed")
-    var status by remember { mutableStateOf(radioOptions[0]) }
+
+    var statusInd: Int
+    statusInd = 0
+
+    if (callforhelp != null) {
+        if (callforhelp.status == "Open")
+            statusInd = 0
+        else if (callforhelp.status == "Ongoing")
+            statusInd = 1
+        else
+            statusInd =2
+    }
+
+    var status by remember { mutableStateOf(radioOptions[statusInd]) }
 
     Column(
         modifier = Modifier
@@ -173,7 +188,7 @@ fun CfhForm(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-
+/*
                 var icon: String ="C"
 
                 if (status === "Open"){
@@ -185,8 +200,8 @@ fun CfhForm(
                 if (status === "Closed"){
                     icon = "C"
                 }
-
-                onSave(icon, title.text, description.text, status )
+*/
+                onSave(title.text, description.text, status )
             },
             Modifier.fillMaxWidth()
         ) {

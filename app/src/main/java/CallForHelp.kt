@@ -1,14 +1,13 @@
 package com.example.cyclisthelp
 
+import android.location.Location
 import com.parse.ParseObject
 import com.parse.ParseQuery
 import java.util.Date
 
 data class CallForHelp(
     var objectId: String? = null,
-    var icon: String,
-    var latitude: Double? = null,
-    var longitude: Double? = null,
+    var loca: Location?,
     var title: String,
     var description: String,
     var status: String,
@@ -20,10 +19,10 @@ data class CallForHelp(
         if (objectId !== null) throw Exception("Help request is already saved to Parse!")
 
         val parseCFH = ParseObject("CallForHelp")
-        parseCFH.put("Icon", icon)
         parseCFH.put("Title", title)
         parseCFH.put("Description", description)
         parseCFH.put("Status", status)
+        loca?.let { parseCFH.put("Location", it) }
 
         parseCFH.saveInBackground {
             if (it !== null) throw Exception("Error: ${it.message}")
@@ -37,7 +36,6 @@ data class CallForHelp(
 
         val query = ParseQuery.getQuery<ParseObject>("CallForHelp")
         val parseCFH = query.get(objectId)
-        parseCFH.put("Icon", icon)
         parseCFH.put("Title", title)
         parseCFH.put("Description", description)
         parseCFH.put("Status", status)

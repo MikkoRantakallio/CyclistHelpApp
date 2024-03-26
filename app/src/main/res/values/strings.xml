@@ -2,4 +2,9 @@
     <string name="app_name">CyclistHelp</string>
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>
     <string name="back4app_app_id">3c6u9EF9UCoXhraRy6mfQXFRre4WtQ2eI06vRm42</string>
-    <string name="back4app_client_key">mmAG90dqSff8QcJ2jZnGXQg9imMs2Dhq9SyAN53L</string></resources>
+    <string name="back4app_client_key">mmAG90dqSff8QcJ2jZnGXQg9imMs2Dhq9SyAN53L</string>
+    <string name="bus_content_description">XYZ</string>
+    <string name="open_description">Open</string>
+    <string name="ongoing_description">Ongoing</string>
+    <string name="closed_description">Closed</string>
+</resources>
