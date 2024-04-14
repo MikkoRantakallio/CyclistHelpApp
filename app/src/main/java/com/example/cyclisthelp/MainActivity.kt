@@ -2,10 +2,10 @@ package com.example.cyclisthelp
 
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -36,13 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat.recreate
 
-import com.example.cyclisthelp.ui.theme.CyclistHelpTheme
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import java.text.SimpleDateFormat
-import java.util.logging.Handler
 
 class MainActivity : ComponentActivity() {
 
@@ -57,10 +52,11 @@ class MainActivity : ComponentActivity() {
                 viewModel = viewModel,
                 onCfhListItemClick = {
                     val intent = Intent(context, FormActivity::class.java)
-                    intent.putExtra("objectId", it.objectId)
+                    intent.putExtra("index", viewModel.CallForHelps.indexOf(it))
                     context.startActivity(intent)                },
                 onAddClick = {
                     val intent = Intent(context, FormActivity::class.java)
+                    intent.putExtra("index", 0)
                     context.startActivity(intent)                },
             )
         }
@@ -75,7 +71,7 @@ fun MainActivityContent(
     onCfhListItemClick: (cfh: CallForHelp) -> Unit,
     onAddClick: () -> Unit,
 ) {
-    val cfhs = viewModel.CallForHelps.value
+    val cfhs = viewModel.CallForHelps
     MaterialTheme {
         Scaffold(
             topBar = { TopAppBar(title = { Text("Help requests") }) },
@@ -158,10 +154,11 @@ fun CfhListItem(cfh: CallForHelp, onCfhListItemClick: (cfh: CallForHelp) -> Unit
 }
 
 @Composable
-fun NoteList(cfhs: Map<String, CallForHelp>, onCfhListItemClick: (cfh: CallForHelp) -> Unit) {
+fun NoteList(cfhs: MutableList<CallForHelp>, onCfhListItemClick: (cfh: CallForHelp) -> Unit) {
     LazyColumn {
-        items(cfhs.entries.toList()) { (_, cfh) ->
-            CfhListItem(cfh = cfh, onCfhListItemClick = onCfhListItemClick)
+
+        for (cfh in cfhs){
+            CfhListItem(cfh, onCfhListItemClick = onCfhListItemClick)
         }
     }
 }

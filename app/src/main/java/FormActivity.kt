@@ -40,8 +40,8 @@ class FormActivity : ComponentActivity() {
     private val viewModel = AppViewModel.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val objectId = intent.getStringExtra("objectId")
-        val cfh = if (objectId !== null) viewModel.CallForHelps.value[objectId] else null
+        val objectId = intent.getIntExtra("index", 0)
+        val cfh = if (objectId != 0) viewModel.CallForHelps[objectId] else null
 
         setContent {
             FormActivityContent(
@@ -57,26 +57,24 @@ class FormActivity : ComponentActivity() {
                         createdAt = java.util.Calendar.getInstance().time
                     )
                     newCFH.addToParse {
-                        viewModel.CallForHelps.value = mapOf((it to newCFH)) + viewModel.CallForHelps.value
+                        viewModel.CallForHelps.add(0, newCFH)
                         finish()
                     }
                 },
                 onSaveClick = { title: String, description: String, status: String ->
                     if (cfh === null) return@FormActivityContent
-                    val updatedCFH = cfh.copy()
+                    val updatedCFH = cfh
                     updatedCFH.title = title
                     updatedCFH.description = description
                     updatedCFH.status = status
                     updatedCFH.updateToParse {
-                        viewModel.CallForHelps.value += (it to updatedCFH)
+                        viewModel.CallForHelps[objectId] = updatedCFH
                         finish()
                     }
                 },
                 onDeleteClick = {
                     if (cfh === null) return@FormActivityContent
-                    viewModel.CallForHelps.value = viewModel.CallForHelps.value.filter {
-                        it.value.objectId != cfh.objectId
-                    }
+                    viewModel.CallForHelps.drop(objectId)
                     cfh.deleteFromParse {
                         finish()
                     }

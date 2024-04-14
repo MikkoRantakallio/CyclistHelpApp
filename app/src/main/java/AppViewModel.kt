@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 
 class AppViewModel : ViewModel() {
 
-    val CallForHelps: MutableState<Map<String, CallForHelp>> = mutableStateOf(mapOf())
+//    val CallForHelps: MutableState<Map<String, CallForHelp>> = mutableStateOf(mapOf())
+    val CallForHelps: MutableList<CallForHelp> = mutableListOf()
 
     init {
         val query = com.parse.ParseQuery.getQuery<com.parse.ParseObject>("CallForHelp")
@@ -23,7 +24,7 @@ class AppViewModel : ViewModel() {
                         loca = null
 
                     )
-                    this.CallForHelps.value += (cfh.objectId!! to cfh)
+                    this.CallForHelps.plus(cfh)
                 }
             } else {
                 println("Error: ${e.message}")
