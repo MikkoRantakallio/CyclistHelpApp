@@ -186,19 +186,6 @@ fun CfhForm(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-/*
-                var icon: String ="C"
-
-                if (status === "Open"){
-                    icon = "O"
-                }
-                if (status === "Ongoing"){
-                    icon = "G"
-                }
-                if (status === "Closed"){
-                    icon = "C"
-                }
-*/
                 onSave(title.text, description.text, status )
             },
             Modifier.fillMaxWidth()

@@ -22,7 +22,6 @@ class AppViewModel : ViewModel() {
                         status = parseCFH.getString("Status")!!,
                         createdAt = parseCFH.createdAt,
                         loca = null
-
                     )
                     this.CallForHelps.plus(cfh)
                 }

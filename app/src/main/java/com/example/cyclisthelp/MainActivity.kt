@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.provider.Settings.Global.getString
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -41,7 +42,7 @@ import java.text.SimpleDateFormat
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel = AppViewModel.getInstance()
+    private val viewM = AppViewModel.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +50,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MainActivityContent(
-                viewModel = viewModel,
+                viewModel = viewM,
                 onCfhListItemClick = {
                     val intent = Intent(context, FormActivity::class.java)
-                    intent.putExtra("index", viewModel.CallForHelps.indexOf(it))
+                    intent.putExtra("index", viewM.CallForHelps.indexOf(it))
                     context.startActivity(intent)                },
                 onAddClick = {
                     val intent = Intent(context, FormActivity::class.java)
@@ -104,7 +105,7 @@ fun CfhListItem(cfh: CallForHelp, onCfhListItemClick: (cfh: CallForHelp) -> Unit
 
         when (cfh.status) {
             "Open" ->
-                Image(painter = painterResource(R.drawable.open),
+                Image(painterResource(R.drawable.open),
                     contentDescription = stringResource(id = R.string.open_description),
                     modifier = imageModifier
                     )
@@ -157,7 +158,7 @@ fun CfhListItem(cfh: CallForHelp, onCfhListItemClick: (cfh: CallForHelp) -> Unit
 fun NoteList(cfhs: MutableList<CallForHelp>, onCfhListItemClick: (cfh: CallForHelp) -> Unit) {
     LazyColumn {
 
-        for (cfh in cfhs){
+        items (cfhs){ cfh ->
             CfhListItem(cfh, onCfhListItemClick = onCfhListItemClick)
         }
     }
